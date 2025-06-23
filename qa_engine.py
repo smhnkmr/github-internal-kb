@@ -152,6 +152,25 @@ class AnswerSynthesizer:
         return response.choices[0].message.content
 
 
+# qa_engine.py (Refactored for Router)
+# ... (all imports and class definitions remain the same) ...
+
+# NEW: Top-level function for the router to call
+def semantic_search_for_concept(query_text):
+    """
+    The main entry point for semantic, conceptual searches.
+    """
+    # Lazily initialize to avoid loading models if not needed
+    retriever = KnowledgeRetriever()
+    synthesizer = AnswerSynthesizer(openai_client)
+
+    context = retriever.retrieve_context(query_text)
+    answer = synthesizer.generate_answer(query_text, context)
+    return answer
+
+# The rest of the file (class definitions) stays the same.
+# Make sure the old `if __name__ == "__main__"` block is removed.
+
 # --- Main Execution Block ---
 # if __name__ == "__main__":
 #     retriever = KnowledgeRetriever()
